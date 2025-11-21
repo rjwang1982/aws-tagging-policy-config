@@ -95,9 +95,32 @@ aws --profile susermt lambda tag-resource \
 ./setup-config.sh susermt cn-northwest-1 my-config-bucket
 ```
 
+## 自动打标签
+
+使用 Python 脚本批量为不合规资源添加标签：
+
+```bash
+python3 auto-tag-resources.py susermt cn-northwest-1
+```
+
+**功能**：
+1. 自动读取不合规资源列表
+2. 显示资源详情和统计
+3. 交互式输入标签值
+4. 批量为资源打标签
+
+**支持的资源类型**：
+- EC2 实例和卷
+- S3 存储桶
+- Lambda 函数
+- RDS 数据库
+- DynamoDB 表
+- 负载均衡器
+
 ## 文件说明
 
 - `manage-rule.sh` - 规则管理脚本（deploy/delete/status）
+- `auto-tag-resources.py` - 自动打标签脚本
 - `setup-config.sh` - AWS Config 初始化脚本
 - `config-rule.json` - 默认配置（计费资源）
 - `config-rule-all-resources.json` - 完整配置（所有资源）
