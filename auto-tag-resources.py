@@ -115,6 +115,27 @@ class ResourceTagger:
         
         return tags
     
+    def resource_exists(self, resource_type: str, resource_id: str) -> bool:
+        """检查资源是否存在"""
+        try:
+            if resource_type == 'AWS::EC2::Instance':
+                ec2 = self.session.client('ec2')
+                response = ec2.describe_instances(InstanceIds=[resource_id])
+                return len(response['Reservations']) > 0
+            elif resource_type == 'AWS::EC2::Volume':
+                ec2 = self.session.client('ec2')
+                response = ec2.describe_volumes(VolumeIds=[resource_id])
+                return len(response['Volumes']) > 0
+            elif resource_type == 'AWS::S3::Bucket':
+                s3 = self.session.client('s3')
+                s3.head_bucket(Bucket=resource_id)
+                return True
+            else:
+                # 其他资源类型假设存在
+                return True
+        except:
+            return False
+    
     def tag_resource(self, resource_type: str, resource_id: str, tags: Dict[str, str]) -> Tuple[bool, str]:
         """为单个资源打标签"""
         try:
@@ -224,6 +245,12 @@ class ResourceTagger:
         for idx, res in enumerate(resources, 1):
             print(f"\n[{idx}/{len(resources)}] {res['type']}")
             print(f"  资源ID: {res['id']}")
+            
+            # 检查资源是否存在
+            if not self.resource_exists(res['type'], res['id']):
+                print(f"  ⊘ 跳过（资源不存在，可能已删除）")
+                skipped_count += 1
+                continue
             
             success, message = self.tag_resource(res['type'], res['id'], tags)
             
