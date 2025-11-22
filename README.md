@@ -17,11 +17,14 @@
 ### 1. 部署规则
 
 ```bash
-# 默认：只检查计费资源（推荐）
+# 默认（中国区）
 ./manage-rule.sh deploy
 
-# 指定 profile 和 region
+# 中国区 - 指定 region
 ./manage-rule.sh deploy susermt cn-northwest-1
+
+# Global 区
+./manage-rule.sh deploy terraform_0603 ap-southeast-1
 
 # 检查所有资源
 ./manage-rule.sh deploy susermt cn-northwest-1 config-rule-all-resources.json
@@ -30,17 +33,24 @@
 ### 2. 查看合规性
 
 ```bash
-# 查看状态和合规性摘要
+# 默认（中国区）
 ./manage-rule.sh status
 
-# 指定配置
+# 中国区 - 指定 region
+./manage-rule.sh status susermt cn-northwest-1
+
+# Global 区
 ./manage-rule.sh status terraform_0603 ap-southeast-1
 ```
 
 ### 3. 删除规则
 
 ```bash
+# 默认（中国区）
 ./manage-rule.sh delete
+
+# Global 区
+./manage-rule.sh delete terraform_0603 ap-southeast-1
 ```
 
 ## 配置
@@ -85,13 +95,21 @@ aws --profile susermt lambda tag-resource \
 如果 AWS Config 未启用，需要先初始化：
 
 ```bash
-./setup-config.sh susermt cn-northwest-1 my-config-bucket
+# 中国区
+./setup-config.sh susermt cn-northwest-1 my-config-bucket-cn
+
+# Global 区
+./setup-config.sh terraform_0603 ap-southeast-1 my-config-bucket-global
 ```
 
 ## 自动打标签
 
 ```bash
+# 中国区
 python3 auto-tag-resources.py susermt cn-northwest-1
+
+# Global 区
+python3 auto-tag-resources.py terraform_0603 ap-southeast-1
 ```
 
 支持：EC2、S3、Lambda、RDS、DynamoDB、ELB
