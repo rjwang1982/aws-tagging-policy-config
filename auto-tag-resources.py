@@ -28,6 +28,10 @@ class ResourceTagger:
         self.session = boto3.Session(profile_name=profile, region_name=region)
         self.config_client = self.session.client('config')
         
+        # 判断是否为中国区
+        self.is_china = region.startswith('cn-')
+        self.arn_partition = 'aws-cn' if self.is_china else 'aws'
+        
         # 必需的标签
         self.required_tags = {
             'siteName': '',
@@ -205,9 +209,9 @@ class ResourceTagger:
         """RDS 实例打标签"""
         rds = self.session.client('rds')
         
-        # 构建 ARN
+        # 构建 ARN（支持中国区和 Global 区）
         account_id = self.session.client('sts').get_caller_identity()['Account']
-        arn = f"arn:aws:rds:{self.region}:{account_id}:db:{db_instance_id}"
+        arn = f"arn:{self.arn_partition}:rds:{self.region}:{account_id}:db:{db_instance_id}"
         
         tag_list = [{'Key': k, 'Value': v} for k, v in tags.items()]
         rds.add_tags_to_resource(ResourceName=arn, Tags=tag_list)

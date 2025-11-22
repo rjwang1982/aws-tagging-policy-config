@@ -61,6 +61,16 @@ echo ""
 # 创建 IAM 角色
 echo -e "${YELLOW}[3/6] 创建 IAM 角色...${NC}"
 ROLE_NAME="AWSConfigRole"
+
+# 判断是否为中国区
+if [[ $REGION == cn-* ]]; then
+    ARN_PARTITION="aws-cn"
+    CONFIG_SERVICE="config.amazonaws.com.cn"
+else
+    ARN_PARTITION="aws"
+    CONFIG_SERVICE="config.amazonaws.com"
+fi
+
 cat > /tmp/config-trust-policy.json << EOF
 {
   "Version": "2012-10-17",
@@ -68,7 +78,7 @@ cat > /tmp/config-trust-policy.json << EOF
     {
       "Effect": "Allow",
       "Principal": {
-        "Service": "config.amazonaws.com"
+        "Service": "$CONFIG_SERVICE"
       },
       "Action": "sts:AssumeRole"
     }
@@ -84,9 +94,9 @@ aws --profile $PROFILE iam create-role \
 
 aws --profile $PROFILE iam attach-role-policy \
     --role-name $ROLE_NAME \
-    --policy-arn arn:aws:iam::aws:policy/service-role/ConfigRole 2>&1 || true
+    --policy-arn arn:${ARN_PARTITION}:iam::aws:policy/service-role/ConfigRole 2>&1 || true
 
-ROLE_ARN="arn:aws:iam::${ACCOUNT_ID}:role/${ROLE_NAME}"
+ROLE_ARN="arn:${ARN_PARTITION}:iam::${ACCOUNT_ID}:role/${ROLE_NAME}"
 echo -e "${GREEN}✓ IAM 角色就绪: $ROLE_ARN${NC}"
 echo ""
 
