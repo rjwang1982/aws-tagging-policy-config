@@ -117,6 +117,15 @@ python3 auto-tag-resources.py susermt cn-northwest-1
 - DynamoDB 表
 - 负载均衡器
 
+## 添加新标签
+
+查看 `HOW_TO_ADD_TAGS.md` 了解如何添加新的必需标签。
+
+**快速步骤**：
+1. 编辑 `config-rule.json` 添加新标签键（如 `tag4Key`）
+2. 编辑 `auto-tag-resources.py` 更新标签字典和输入逻辑
+3. 重新部署规则：`./manage-rule.sh delete && ./manage-rule.sh deploy`
+
 ## 文件说明
 
 - `manage-rule.sh` - 规则管理脚本（deploy/delete/status）
@@ -124,6 +133,8 @@ python3 auto-tag-resources.py susermt cn-northwest-1
 - `setup-config.sh` - AWS Config 初始化脚本
 - `config-rule.json` - 默认配置（计费资源）
 - `config-rule-all-resources.json` - 完整配置（所有资源）
+- `tags-config.json` - 标签配置文件（参考）
+- `HOW_TO_ADD_TAGS.md` - 添加新标签的详细说明
 
 ## 注意事项
 

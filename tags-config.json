@@ -1,0 +1,19 @@
+{
+  "requiredTags": [
+    {
+      "key": "siteName",
+      "description": "站点名称",
+      "examples": ["production", "staging", "development"]
+    },
+    {
+      "key": "businessCostType",
+      "description": "业务成本类型",
+      "examples": ["compute", "storage", "network", "database"]
+    },
+    {
+      "key": "platform",
+      "description": "平台标识",
+      "examples": ["web", "api", "data", "ml"]
+    }
+  ]
+}
