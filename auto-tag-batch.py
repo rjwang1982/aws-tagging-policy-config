@@ -160,8 +160,8 @@ def main():
         print("使用方法: python3 auto-tag-batch.py <profile> <region> <siteName> <businessCostType> <platform>")
         print("")
         print("示例:")
-        print("  python3 auto-tag-batch.py susermt cn-northwest-1 production compute web")
-        print("  python3 auto-tag-batch.py terraform_0603 ap-southeast-1 staging storage api")
+        print("  python3 auto-tag-batch.py c5611 cn-northwest-1 production compute web")
+        print("  python3 auto-tag-batch.py g0603 ap-southeast-1 staging storage api")
         sys.exit(1)
     
     profile = sys.argv[1]

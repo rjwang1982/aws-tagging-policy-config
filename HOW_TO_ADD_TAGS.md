@@ -51,7 +51,7 @@ def main():
         print("使用方法: python3 auto-tag-batch.py <profile> <region> <siteName> <businessCostType> <platform> <owner>")
         print("")
         print("示例:")
-        print("  python3 auto-tag-batch.py susermt cn-northwest-1 production compute web rj.wang")
+        print("  python3 auto-tag-batch.py c5611 cn-northwest-1 production compute web rj.wang")
         sys.exit(1)
     
     profile = sys.argv[1]
@@ -125,10 +125,10 @@ def get_tag_values(self) -> Dict[str, str]:
 
 ```bash
 # 中国区
-./manage-rule.sh deploy susermt cn-northwest-1
+./manage-rule.sh deploy c5611 cn-northwest-1
 
 # Global 区
-./manage-rule.sh deploy terraform_0603 ap-southeast-1
+./manage-rule.sh deploy g0603 ap-southeast-1
 ```
 
 ### 步骤 4: 为现有资源打标签
@@ -136,24 +136,24 @@ def get_tag_values(self) -> Dict[str, str]:
 ```bash
 # 使用修改后的批量打标签脚本
 # 中国区
-python3 auto-tag-batch.py susermt cn-northwest-1 production compute web rj.wang
+python3 auto-tag-batch.py c5611 cn-northwest-1 production compute web rj.wang
 
 # Global 区
-python3 auto-tag-batch.py terraform_0603 ap-southeast-1 staging storage api team-ops
+python3 auto-tag-batch.py g0603 ap-southeast-1 staging storage api team-ops
 ```
 
 ### 步骤 5: 验证
 
 ```bash
 # 查看合规性
-./manage-rule.sh status susermt cn-northwest-1
+./manage-rule.sh status c5611 cn-northwest-1
 
 # 触发重新评估
-aws --profile susermt configservice start-config-rules-evaluation \
+aws --profile c5611 configservice start-config-rules-evaluation \
   --config-rule-names required-tags-rule
 
 # 等待 2-5 分钟后再次查看
-./manage-rule.sh status susermt cn-northwest-1
+./manage-rule.sh status c5611 cn-northwest-1
 ```
 
 ## 限制和注意事项
@@ -192,18 +192,18 @@ aws --profile susermt configservice start-config-rules-evaluation \
 
 ### 3. 重新部署
 ```bash
-./manage-rule.sh deploy susermt cn-northwest-1
+./manage-rule.sh deploy c5611 cn-northwest-1
 ```
 
 ### 4. 清理资源标签（可选）
 ```bash
 # EC2 实例
-aws --profile susermt ec2 delete-tags \
+aws --profile c5611 ec2 delete-tags \
   --resources i-xxx \
   --tags Key=oldTag
 
 # S3 存储桶需要重新设置所有标签
-aws --profile susermt s3api put-bucket-tagging \
+aws --profile c5611 s3api put-bucket-tagging \
   --bucket my-bucket \
   --tagging 'TagSet=[
     {Key=siteName,Value=production},
@@ -285,13 +285,13 @@ tags = {
 ### 3. 部署和使用
 ```bash
 # 部署规则
-./manage-rule.sh deploy susermt cn-northwest-1
+./manage-rule.sh deploy c5611 cn-northwest-1
 
 # 批量打标签
-python3 auto-tag-batch.py susermt cn-northwest-1 production compute web rj.wang ops-team
+python3 auto-tag-batch.py c5611 cn-northwest-1 production compute web rj.wang ops-team
 
 # 验证
-./manage-rule.sh status susermt cn-northwest-1
+./manage-rule.sh status c5611 cn-northwest-1
 ```
 
 ## 相关资源

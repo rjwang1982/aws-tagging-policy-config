@@ -44,10 +44,10 @@
 
 ```bash
 # 中国区
-./setup-config.sh susermt cn-northwest-1 my-config-bucket-cn
+./setup-config.sh c5611 cn-northwest-1 my-config-bucket-cn
 
 # Global 区
-./setup-config.sh terraform_0603 ap-southeast-1 my-config-bucket-global
+./setup-config.sh g0603 ap-southeast-1 my-config-bucket-global
 ```
 
 ### 2. 部署标签规则
@@ -57,10 +57,10 @@
 ./manage-rule.sh deploy
 
 # 中国区（指定 region）
-./manage-rule.sh deploy susermt cn-northwest-1
+./manage-rule.sh deploy c5611 cn-northwest-1
 
 # Global 区
-./manage-rule.sh deploy terraform_0603 ap-southeast-1
+./manage-rule.sh deploy g0603 ap-southeast-1
 ```
 
 ### 3. 批量打标签
@@ -69,10 +69,10 @@
 
 ```bash
 # 中国区
-python3 auto-tag-batch.py susermt cn-northwest-1 production compute infrastructure
+python3 auto-tag-batch.py c5611 cn-northwest-1 production compute infrastructure
 
 # Global 区
-python3 auto-tag-batch.py terraform_0603 ap-southeast-1 staging storage api
+python3 auto-tag-batch.py g0603 ap-southeast-1 staging storage api
 
 # 参数说明
 # python3 auto-tag-batch.py <profile> <region> <siteName> <businessCostType> <platform>
@@ -82,10 +82,10 @@ python3 auto-tag-batch.py terraform_0603 ap-southeast-1 staging storage api
 
 ```bash
 # 中国区
-python3 auto-tag-resources.py susermt cn-northwest-1
+python3 auto-tag-resources.py c5611 cn-northwest-1
 
 # Global 区
-python3 auto-tag-resources.py terraform_0603 ap-southeast-1
+python3 auto-tag-resources.py g0603 ap-southeast-1
 ```
 
 ### 4. 查看合规状态
@@ -95,10 +95,10 @@ python3 auto-tag-resources.py terraform_0603 ap-southeast-1
 ./manage-rule.sh status
 
 # 中国区（指定 region）
-./manage-rule.sh status susermt cn-northwest-1
+./manage-rule.sh status c5611 cn-northwest-1
 
 # Global 区
-./manage-rule.sh status terraform_0603 ap-southeast-1
+./manage-rule.sh status g0603 ap-southeast-1
 ```
 
 ## 中国区 vs Global 区
@@ -113,7 +113,7 @@ python3 auto-tag-resources.py terraform_0603 ap-southeast-1
 
 | 项目 | 中国区 | Global 区 |
 |------|--------|-----------|
-| **Profile** | susermt | terraform_0603 |
+| **Profile** | c5611 | g0603 |
 | **Region** | cn-north-1, cn-northwest-1 | us-east-1, ap-southeast-1 等 |
 | **ARN 前缀** | arn:aws-cn: | arn:aws: |
 | **Config 服务** | config.amazonaws.com.cn | config.amazonaws.com |
@@ -123,16 +123,16 @@ python3 auto-tag-resources.py terraform_0603 ap-southeast-1
 
 ```bash
 # 中国区完整流程
-./setup-config.sh susermt cn-northwest-1 config-bucket-cn
-./manage-rule.sh deploy susermt cn-northwest-1
-python3 auto-tag-batch.py susermt cn-northwest-1 production compute web
-./manage-rule.sh status susermt cn-northwest-1
+./setup-config.sh c5611 cn-northwest-1 config-bucket-cn
+./manage-rule.sh deploy c5611 cn-northwest-1
+python3 auto-tag-batch.py c5611 cn-northwest-1 production compute web
+./manage-rule.sh status c5611 cn-northwest-1
 
 # Global 区完整流程
-./setup-config.sh terraform_0603 ap-southeast-1 config-bucket-global
-./manage-rule.sh deploy terraform_0603 ap-southeast-1
-python3 auto-tag-batch.py terraform_0603 ap-southeast-1 staging storage api
-./manage-rule.sh status terraform_0603 ap-southeast-1
+./setup-config.sh g0603 ap-southeast-1 config-bucket-global
+./manage-rule.sh deploy g0603 ap-southeast-1
+python3 auto-tag-batch.py g0603 ap-southeast-1 staging storage api
+./manage-rule.sh status g0603 ap-southeast-1
 ```
 
 ## 常见问题
@@ -143,13 +143,13 @@ python3 auto-tag-batch.py terraform_0603 ap-southeast-1 staging storage api
 
 **检查状态**:
 ```bash
-aws --profile susermt configservice describe-configuration-recorder-status
+aws --profile c5611 configservice describe-configuration-recorder-status
 ```
 
 **解决方案**:
 ```bash
 # 启动记录器
-aws --profile susermt configservice start-configuration-recorder \
+aws --profile c5611 configservice start-configuration-recorder \
   --configuration-recorder-name default
 ```
 
@@ -169,11 +169,11 @@ aws --profile susermt configservice start-configuration-recorder \
 
 ```bash
 # 中国区
-aws --profile susermt configservice start-config-rules-evaluation \
+aws --profile c5611 configservice start-config-rules-evaluation \
   --config-rule-names required-tags-rule
 
 # Global 区
-aws --profile terraform_0603 configservice start-config-rules-evaluation \
+aws --profile g0603 configservice start-config-rules-evaluation \
   --config-rule-names required-tags-rule
 ```
 
@@ -187,11 +187,11 @@ aws --profile terraform_0603 configservice start-config-rules-evaluation \
 
 ```bash
 # 查看 EC2 实例
-aws --profile susermt configservice list-discovered-resources \
+aws --profile c5611 configservice list-discovered-resources \
   --resource-type AWS::EC2::Instance
 
 # 查看 S3 存储桶
-aws --profile susermt configservice list-discovered-resources \
+aws --profile c5611 configservice list-discovered-resources \
   --resource-type AWS::S3::Bucket
 ```
 
@@ -266,7 +266,7 @@ python3 auto-tag-resources.py <profile> <region>
 
 ### EC2 实例
 ```bash
-aws --profile susermt ec2 create-tags \
+aws --profile c5611 ec2 create-tags \
   --resources i-xxx \
   --tags Key=siteName,Value=production \
          Key=businessCostType,Value=compute \
@@ -276,7 +276,7 @@ aws --profile susermt ec2 create-tags \
 
 ### S3 存储桶
 ```bash
-aws --profile susermt s3api put-bucket-tagging \
+aws --profile c5611 s3api put-bucket-tagging \
   --bucket my-bucket \
   --tagging 'TagSet=[
     {Key=siteName,Value=production},
@@ -289,13 +289,13 @@ aws --profile susermt s3api put-bucket-tagging \
 ### Lambda 函数
 ```bash
 # 中国区
-aws --profile susermt lambda tag-resource \
+aws --profile c5611 lambda tag-resource \
   --resource arn:aws-cn:lambda:cn-northwest-1:account:function:name \
   --tags siteName=production,businessCostType=compute,platform=serverless \
   --region cn-northwest-1
 
 # Global 区
-aws --profile terraform_0603 lambda tag-resource \
+aws --profile g0603 lambda tag-resource \
   --resource arn:aws:lambda:ap-southeast-1:account:function:name \
   --tags siteName=production,businessCostType=compute,platform=serverless \
   --region ap-southeast-1
@@ -311,7 +311,7 @@ aws --profile terraform_0603 lambda tag-resource \
 
 **使用完整配置**:
 ```bash
-./manage-rule.sh deploy susermt cn-northwest-1 config-rule-all-resources.json
+./manage-rule.sh deploy c5611 cn-northwest-1 config-rule-all-resources.json
 ```
 
 ## 最佳实践
@@ -319,7 +319,7 @@ aws --profile terraform_0603 lambda tag-resource \
 ### 1. 定期检查 Config 记录器状态
 ```bash
 # 添加到 cron 或定时任务
-aws --profile susermt configservice describe-configuration-recorder-status
+aws --profile c5611 configservice describe-configuration-recorder-status
 ```
 
 ### 2. 新资源创建后自动打标签
@@ -334,10 +334,10 @@ aws --profile susermt configservice describe-configuration-recorder-status
 每个区域需要独立部署 Config 规则：
 ```bash
 # 中国区 - 北京
-./manage-rule.sh deploy susermt cn-north-1
+./manage-rule.sh deploy c5611 cn-north-1
 
 # 中国区 - 宁夏
-./manage-rule.sh deploy susermt cn-northwest-1
+./manage-rule.sh deploy c5611 cn-northwest-1
 ```
 
 ## 故障排查
@@ -345,16 +345,16 @@ aws --profile susermt configservice describe-configuration-recorder-status
 ### 问题：规则部署失败
 ```bash
 # 检查 Config 是否启用
-aws --profile susermt configservice describe-configuration-recorder-status
+aws --profile c5611 configservice describe-configuration-recorder-status
 
 # 如果未启用，运行初始化
-./setup-config.sh susermt cn-northwest-1 my-bucket
+./setup-config.sh c5611 cn-northwest-1 my-bucket
 ```
 
 ### 问题：打标签失败
 ```bash
 # 检查 IAM 权限
-aws --profile susermt sts get-caller-identity
+aws --profile c5611 sts get-caller-identity
 
 # 确保有以下权限：
 # - ec2:CreateTags
@@ -367,7 +367,7 @@ aws --profile susermt sts get-caller-identity
 ```bash
 # 等待 2-5 分钟
 # 或手动触发评估
-aws --profile susermt configservice start-config-rules-evaluation \
+aws --profile c5611 configservice start-config-rules-evaluation \
   --config-rule-names required-tags-rule
 ```
 

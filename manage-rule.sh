@@ -26,7 +26,7 @@ usage() {
     echo "  status   - 查看规则状态"
     echo ""
     echo "参数 (可选):"
-    echo "  profile     - AWS CLI profile (默认: susermt)"
+    echo "  profile     - AWS CLI profile (默认: c5611)"
     echo "  region      - AWS 区域 (默认: cn-northwest-1)"
     echo "  config-file - 配置文件 (默认: config-rule.json)"
     echo ""
@@ -37,8 +37,8 @@ usage() {
     echo ""
     echo "示例:"
     echo "  $0 deploy                                    # 使用默认配置"
-    echo "  $0 deploy susermt cn-northwest-1             # 指定 profile 和 region"
-    echo "  $0 deploy susermt cn-northwest-1 config-rule-billable.json  # 仅检查计费资源"
+    echo "  $0 deploy c5611 cn-northwest-1             # 指定 profile 和 region"
+    echo "  $0 deploy c5611 cn-northwest-1 config-rule-billable.json  # 仅检查计费资源"
     echo "  $0 delete                                    # 删除规则"
     echo "  $0 status                                    # 查看状态"
     exit 1
@@ -50,7 +50,7 @@ if [ $# -lt 1 ]; then
 fi
 
 ACTION=$1
-PROFILE=${2:-susermt}
+PROFILE=${2:-c5611}
 REGION=${3:-cn-northwest-1}
 CONFIG_FILE=${4:-config-rule.json}
 

@@ -81,7 +81,7 @@ CONFIG_SERVICE="config.amazonaws.com"
 
 ### 测试环境
 - **区域**: 中国区（cn-northwest-1）
-- **Profile**: susermt
+- **Profile**: c5611
 - **账号ID**: 856773105611
 
 ### 测试结果
@@ -106,7 +106,7 @@ CONFIG_SERVICE="config.amazonaws.com"
 
 **解决方案**:
 ```bash
-aws --profile susermt configservice start-configuration-recorder \
+aws --profile c5611 configservice start-configuration-recorder \
   --configuration-recorder-name default
 ```
 
@@ -143,22 +143,22 @@ aws --profile susermt configservice start-configuration-recorder \
 ### 1. 初始化
 ```bash
 # 一次性操作
-./setup-config.sh susermt cn-northwest-1 config-bucket-cn
+./setup-config.sh c5611 cn-northwest-1 config-bucket-cn
 ```
 
 ### 2. 日常使用
 ```bash
 # 定期检查合规性
-./manage-rule.sh status susermt cn-northwest-1
+./manage-rule.sh status c5611 cn-northwest-1
 
 # 发现不合规资源后立即修复
-python3 auto-tag-batch.py susermt cn-northwest-1 production compute infrastructure
+python3 auto-tag-batch.py c5611 cn-northwest-1 production compute infrastructure
 ```
 
 ### 3. 故障排查
 ```bash
 # 遇到问题时运行
-./troubleshoot.sh susermt cn-northwest-1
+./troubleshoot.sh c5611 cn-northwest-1
 ```
 
 ### 4. 新资源创建
@@ -251,13 +251,13 @@ aws ec2 run-instances ... \
 ### 定期检查
 ```bash
 # 每周检查一次
-./manage-rule.sh status susermt cn-northwest-1
+./manage-rule.sh status c5611 cn-northwest-1
 ```
 
 ### 监控 Config 记录器
 ```bash
 # 每天检查记录器状态
-aws --profile susermt configservice describe-configuration-recorder-status
+aws --profile c5611 configservice describe-configuration-recorder-status
 ```
 
 ### 清理历史数据

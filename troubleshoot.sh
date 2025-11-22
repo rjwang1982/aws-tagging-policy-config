@@ -17,8 +17,8 @@ usage() {
     echo "使用方法: $0 <profile> <region>"
     echo ""
     echo "示例:"
-    echo "  $0 susermt cn-northwest-1"
-    echo "  $0 terraform_0603 ap-southeast-1"
+    echo "  $0 c5611 cn-northwest-1"
+    echo "  $0 g0603 ap-southeast-1"
     exit 1
 }
 

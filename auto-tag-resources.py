@@ -283,8 +283,8 @@ def main():
         print("使用方法: python3 auto-tag-resources.py <profile> <region>")
         print("")
         print("示例:")
-        print("  python3 auto-tag-resources.py susermt cn-northwest-1")
-        print("  python3 auto-tag-resources.py terraform_0603 ap-southeast-1")
+        print("  python3 auto-tag-resources.py c5611 cn-northwest-1")
+        print("  python3 auto-tag-resources.py g0603 ap-southeast-1")
         sys.exit(1)
     
     profile = sys.argv[1]

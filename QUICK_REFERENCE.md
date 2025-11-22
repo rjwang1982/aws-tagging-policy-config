@@ -9,30 +9,30 @@
 
 ```bash
 # 完整流程
-./setup-config.sh susermt cn-northwest-1 config-bucket-cn && \
-./manage-rule.sh deploy susermt cn-northwest-1 && \
-python3 auto-tag-batch.py susermt cn-northwest-1 production compute infrastructure
+./setup-config.sh c5611 cn-northwest-1 config-bucket-cn && \
+./manage-rule.sh deploy c5611 cn-northwest-1 && \
+python3 auto-tag-batch.py c5611 cn-northwest-1 production compute infrastructure
 
 # 查看状态
-./manage-rule.sh status susermt cn-northwest-1
+./manage-rule.sh status c5611 cn-northwest-1
 
 # 故障排查
-./troubleshoot.sh susermt cn-northwest-1
+./troubleshoot.sh c5611 cn-northwest-1
 ```
 
 ### Global 区
 
 ```bash
 # 完整流程
-./setup-config.sh terraform_0603 ap-southeast-1 config-bucket-global && \
-./manage-rule.sh deploy terraform_0603 ap-southeast-1 && \
-python3 auto-tag-batch.py terraform_0603 ap-southeast-1 staging storage api
+./setup-config.sh g0603 ap-southeast-1 config-bucket-global && \
+./manage-rule.sh deploy g0603 ap-southeast-1 && \
+python3 auto-tag-batch.py g0603 ap-southeast-1 staging storage api
 
 # 查看状态
-./manage-rule.sh status terraform_0603 ap-southeast-1
+./manage-rule.sh status g0603 ap-southeast-1
 
 # 故障排查
-./troubleshoot.sh terraform_0603 ap-southeast-1
+./troubleshoot.sh g0603 ap-southeast-1
 ```
 
 ## 常用命令速查
@@ -41,14 +41,14 @@ python3 auto-tag-batch.py terraform_0603 ap-southeast-1 staging storage api
 
 ```bash
 # 检查状态
-aws --profile susermt configservice describe-configuration-recorder-status
+aws --profile c5611 configservice describe-configuration-recorder-status
 
 # 启动记录器
-aws --profile susermt configservice start-configuration-recorder \
+aws --profile c5611 configservice start-configuration-recorder \
   --configuration-recorder-name default
 
 # 停止记录器
-aws --profile susermt configservice stop-configuration-recorder \
+aws --profile c5611 configservice stop-configuration-recorder \
   --configuration-recorder-name default
 ```
 
@@ -56,16 +56,16 @@ aws --profile susermt configservice stop-configuration-recorder \
 
 ```bash
 # 部署规则
-./manage-rule.sh deploy susermt cn-northwest-1
+./manage-rule.sh deploy c5611 cn-northwest-1
 
 # 查看状态
-./manage-rule.sh status susermt cn-northwest-1
+./manage-rule.sh status c5611 cn-northwest-1
 
 # 删除规则
-./manage-rule.sh delete susermt cn-northwest-1
+./manage-rule.sh delete c5611 cn-northwest-1
 
 # 触发评估
-aws --profile susermt configservice start-config-rules-evaluation \
+aws --profile c5611 configservice start-config-rules-evaluation \
   --config-rule-names required-tags-rule
 ```
 
@@ -73,26 +73,26 @@ aws --profile susermt configservice start-config-rules-evaluation \
 
 ```bash
 # 非交互式（推荐）
-python3 auto-tag-batch.py susermt cn-northwest-1 production compute infrastructure
+python3 auto-tag-batch.py c5611 cn-northwest-1 production compute infrastructure
 
 # 交互式
-python3 auto-tag-resources.py susermt cn-northwest-1
+python3 auto-tag-resources.py c5611 cn-northwest-1
 ```
 
 ### 查询资源
 
 ```bash
 # 查看不合规资源
-aws --profile susermt configservice get-compliance-details-by-config-rule \
+aws --profile c5611 configservice get-compliance-details-by-config-rule \
   --config-rule-name required-tags-rule \
   --compliance-types NON_COMPLIANT
 
 # 查看 Config 发现的资源
-aws --profile susermt configservice list-discovered-resources \
+aws --profile c5611 configservice list-discovered-resources \
   --resource-type AWS::EC2::Instance
 
 # 查看实际资源
-aws --profile susermt ec2 describe-instances \
+aws --profile c5611 ec2 describe-instances \
   --query 'Reservations[*].Instances[*].[InstanceId,State.Name,Tags[?Key==`Name`].Value|[0]]' \
   --output table
 ```
@@ -101,14 +101,14 @@ aws --profile susermt ec2 describe-instances \
 
 ```bash
 # EC2 实例
-aws --profile susermt ec2 create-tags \
+aws --profile c5611 ec2 create-tags \
   --resources i-xxx \
   --tags Key=siteName,Value=production \
          Key=businessCostType,Value=compute \
          Key=platform,Value=web
 
 # S3 存储桶
-aws --profile susermt s3api put-bucket-tagging \
+aws --profile c5611 s3api put-bucket-tagging \
   --bucket my-bucket \
   --tagging 'TagSet=[
     {Key=siteName,Value=production},
@@ -117,7 +117,7 @@ aws --profile susermt s3api put-bucket-tagging \
   ]'
 
 # EBS 卷
-aws --profile susermt ec2 create-tags \
+aws --profile c5611 ec2 create-tags \
   --resources vol-xxx \
   --tags Key=siteName,Value=production \
          Key=businessCostType,Value=storage \
@@ -155,10 +155,10 @@ aws --profile susermt ec2 create-tags \
 
 ```bash
 # 检查
-aws --profile susermt configservice describe-configuration-recorder-status
+aws --profile c5611 configservice describe-configuration-recorder-status
 
 # 修复
-aws --profile susermt configservice start-configuration-recorder \
+aws --profile c5611 configservice start-configuration-recorder \
   --configuration-recorder-name default
 ```
 
@@ -166,12 +166,12 @@ aws --profile susermt configservice start-configuration-recorder \
 
 ```bash
 # 1. 检查记录器是否运行
-./troubleshoot.sh susermt cn-northwest-1
+./troubleshoot.sh c5611 cn-northwest-1
 
 # 2. 等待 2-5 分钟
 
 # 3. 触发评估
-aws --profile susermt configservice start-config-rules-evaluation \
+aws --profile c5611 configservice start-config-rules-evaluation \
   --config-rule-names required-tags-rule
 ```
 
@@ -179,10 +179,10 @@ aws --profile susermt configservice start-config-rules-evaluation \
 
 ```bash
 # 检查权限
-aws --profile susermt sts get-caller-identity
+aws --profile c5611 sts get-caller-identity
 
 # 查看错误详情
-python3 auto-tag-batch.py susermt cn-northwest-1 production compute infrastructure 2>&1 | tee tag-errors.log
+python3 auto-tag-batch.py c5611 cn-northwest-1 production compute infrastructure 2>&1 | tee tag-errors.log
 ```
 
 ### 问题：评估结果不更新
@@ -191,7 +191,7 @@ python3 auto-tag-batch.py susermt cn-northwest-1 production compute infrastructu
 # 等待 2-5 分钟，Config 有延迟
 
 # 查看详细合规性
-aws --profile susermt configservice get-compliance-details-by-config-rule \
+aws --profile c5611 configservice get-compliance-details-by-config-rule \
   --config-rule-name required-tags-rule \
   --compliance-types NON_COMPLIANT \
   --output json | jq '.EvaluationResults | length'
@@ -201,12 +201,12 @@ aws --profile susermt configservice get-compliance-details-by-config-rule \
 
 | 操作 | 中国区 | Global 区 |
 |------|--------|-----------|
-| **Profile** | `susermt` | `terraform_0603` |
+| **Profile** | `c5611` | `g0603` |
 | **Region** | `cn-northwest-1` | `ap-southeast-1` |
 | **ARN** | `arn:aws-cn:...` | `arn:aws:...` |
-| **初始化** | `./setup-config.sh susermt cn-northwest-1 bucket` | `./setup-config.sh terraform_0603 ap-southeast-1 bucket` |
-| **部署** | `./manage-rule.sh deploy susermt cn-northwest-1` | `./manage-rule.sh deploy terraform_0603 ap-southeast-1` |
-| **打标签** | `python3 auto-tag-batch.py susermt cn-northwest-1 ...` | `python3 auto-tag-batch.py terraform_0603 ap-southeast-1 ...` |
+| **初始化** | `./setup-config.sh c5611 cn-northwest-1 bucket` | `./setup-config.sh g0603 ap-southeast-1 bucket` |
+| **部署** | `./manage-rule.sh deploy c5611 cn-northwest-1` | `./manage-rule.sh deploy g0603 ap-southeast-1` |
+| **打标签** | `python3 auto-tag-batch.py c5611 cn-northwest-1 ...` | `python3 auto-tag-batch.py g0603 ap-southeast-1 ...` |
 
 ## 文件说明
 
@@ -225,7 +225,7 @@ aws --profile susermt configservice get-compliance-details-by-config-rule \
 ### 1. 定期检查
 ```bash
 # 每周检查一次合规性
-./manage-rule.sh status susermt cn-northwest-1
+./manage-rule.sh status c5611 cn-northwest-1
 ```
 
 ### 2. 新资源立即打标签
@@ -237,13 +237,13 @@ aws ec2 run-instances ... --tag-specifications 'ResourceType=instance,Tags=[{Key
 ### 3. 自动化
 ```bash
 # 使用 cron 定期检查和修复
-0 2 * * * cd /path/to/aws-tagging-policy-config && python3 auto-tag-batch.py susermt cn-northwest-1 production compute infrastructure
+0 2 * * * cd /path/to/aws-tagging-policy-config && python3 auto-tag-batch.py c5611 cn-northwest-1 production compute infrastructure
 ```
 
 ### 4. 监控 Config 记录器
 ```bash
 # 每天检查记录器状态
-aws --profile susermt configservice describe-configuration-recorder-status | jq -r '.ConfigurationRecordersStatus[0].recording'
+aws --profile c5611 configservice describe-configuration-recorder-status | jq -r '.ConfigurationRecordersStatus[0].recording'
 ```
 
 ## 成本优化

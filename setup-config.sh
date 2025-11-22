@@ -22,7 +22,7 @@ usage() {
     echo "  s3-bucket-name  - 用于存储 Config 数据的 S3 存储桶名称"
     echo ""
     echo "示例:"
-    echo "  $0 susermt cn-northwest-1 my-config-bucket"
+    echo "  $0 c5611 cn-northwest-1 my-config-bucket"
     exit 1
 }
 
