@@ -11,7 +11,21 @@ AWS 资源批量打标签工具（非交互式版本）
 
 import boto3
 import sys
+import json
+import os
 from typing import List, Dict, Tuple
+
+# ============================================================
+# 默认标签配置（可在此处修改默认值）
+# ============================================================
+DEFAULT_TAGS = {
+    'siteName': 'production',           # 站点/环境名称
+    'businessCostType': 'infrastructure', # 成本类型
+    'platform': 'general'                # 平台标识
+}
+
+# 标签配置文件路径（可选）
+TAG_CONFIG_FILE = 'tag-config.json'
 
 
 class BatchTagger:
@@ -155,22 +169,63 @@ class BatchTagger:
         print("=" * 80)
 
 
+def load_tags_from_config() -> Dict[str, str]:
+    """从配置文件加载标签"""
+    if os.path.exists(TAG_CONFIG_FILE):
+        try:
+            with open(TAG_CONFIG_FILE, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except Exception as e:
+            print(f"⚠ 配置文件加载失败: {e}")
+    return DEFAULT_TAGS.copy()
+
+
 def main():
-    if len(sys.argv) < 6:
-        print("使用方法: python3 auto-tag-batch.py <profile> <region> <siteName> <businessCostType> <platform>")
+    # 支持三种使用方式：
+    # 1. 使用默认配置: python3 auto-tag-batch.py <profile> <region>
+    # 2. 使用配置文件: python3 auto-tag-batch.py <profile> <region> --config
+    # 3. 命令行参数: python3 auto-tag-batch.py <profile> <region> <siteName> <businessCostType> <platform>
+    
+    if len(sys.argv) < 3:
+        print("使用方法:")
+        print("  1. 使用默认配置:")
+        print("     python3 auto-tag-batch.py <profile> <region>")
+        print("")
+        print("  2. 使用配置文件 (tag-config.json):")
+        print("     python3 auto-tag-batch.py <profile> <region> --config")
+        print("")
+        print("  3. 命令行指定标签:")
+        print("     python3 auto-tag-batch.py <profile> <region> <siteName> <businessCostType> <platform>")
         print("")
         print("示例:")
+        print("  python3 auto-tag-batch.py c5611 cn-northwest-1")
+        print("  python3 auto-tag-batch.py c5611 cn-northwest-1 --config")
         print("  python3 auto-tag-batch.py c5611 cn-northwest-1 production compute web")
-        print("  python3 auto-tag-batch.py g0603 ap-southeast-1 staging storage api")
         sys.exit(1)
     
     profile = sys.argv[1]
     region = sys.argv[2]
-    tags = {
-        'siteName': sys.argv[3],
-        'businessCostType': sys.argv[4],
-        'platform': sys.argv[5]
-    }
+    
+    # 确定标签来源
+    if len(sys.argv) == 3:
+        # 使用默认配置
+        tags = DEFAULT_TAGS.copy()
+        print("使用默认标签配置")
+    elif len(sys.argv) == 4 and sys.argv[3] == '--config':
+        # 使用配置文件
+        tags = load_tags_from_config()
+        print(f"从配置文件加载标签: {TAG_CONFIG_FILE}")
+    elif len(sys.argv) >= 6:
+        # 使用命令行参数
+        tags = {
+            'siteName': sys.argv[3],
+            'businessCostType': sys.argv[4],
+            'platform': sys.argv[5]
+        }
+        print("使用命令行参数")
+    else:
+        print("✗ 参数错误")
+        sys.exit(1)
     
     print("=" * 80)
     print("AWS 资源批量打标签工具")
